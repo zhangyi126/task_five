@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>队列</title>
+    <style>
+        .style{
+            margin-top: 20px;
+            background-color: red;
+            margin-right: 5px;
+            border: none;
+            vertical-align:bottom
+        }
+    </style>
+</head>
+<body>
+<div class="inbtns">
+    <input type="number" id="number" autofocus min="10" max="100" placeholder="请输入10到100以内的数字" size="700">
+    <input type="button" value="左侧入" id="left_in" onclick="main(this.id)">
+    <input type="button" value="右侧入" id="right_in" onclick="main(this.id)">
+    <input type="button" value="左侧出" id="left_out" onclick="main(this.id)">
+    <input type="button" value="右侧出" id="right_out" onclick="main(this.id)">
+    <input type="button" value="从大到小排列" id="smaller">
+    <input type="button" value="从小到大排列" id="bigger">
+</div>
+<div id="display" style="height: 100px;" >
+
+</div>
+<script>
+    //  新建一个数组，存放添加删除的数字，可不用。
+    var arr = [];
+    //    点击四个按钮调用此函数
+    function main(id) {
+        console.log(id);
+        switch (id){
+
+            case "left_in":
+                var value = document.getElementById('number').value;
+                arr.unshift(value);
+                display(arr);
+                makeHeight();
+                break;
+            case "right_in":
+                var value = document.getElementById('number').value;
+                arr.push(value);
+                display(arr);
+                makeHeight();
+                break;
+            case "left_out":
+                arr.shift();
+                del(id);
+                break;
+            case "right_out":
+                arr.pop();
+                del(id);
+                break;
+            default:
+                console.log("请点击四个按钮！")
+        }
+        console.log(arr);
+    }
+//    利用for循环，将数组中的数字按顺序添加到显示区域
+    function display(arr) {
+        var p = document.getElementById("display");
+        p.innerHTML = "";
+        for(var n = 0;n<arr.length;n++){
+            var bt =document.createElement("button");
+            bt.innerText = arr[n];
+            p.appendChild(bt);
+//          为添加的按钮增加样式类
+            bt.className='style';
+
+        }
+
+//          清空输入框的数字
+          document.getElementById("number").value = "";
+//          为添加的按钮绑定点击事件，单击删除
+          bt.onclick=function () {
+              this.parentNode.removeChild(this);
+//            }
+    };
+
+    //判断id值，将数字从前或后增加到显示区域。
+//    function add(value,id) {
+//        if(value !=""&&arr.length<=60&&value>9&&value<101){
+//            var p = document.getElementById("display");
+//            var bt = document.createElement("button");
+//            bt.innerText = value;
+//            if(id=="left_in"){
+//                p.insertBefore(bt,p.childNodes[0]);
+//            }else {
+//                p.appendChild(bt);
+//            }
+//            bt.style.height = value+'px';
+////            为添加的按钮增加样式类
+//            bt.className='style';
+////            清空输入框的数字
+//            document.getElementById("number").value = "";
+////            为添加的按钮绑定点击事件，单击删除
+//            bt.onclick=function () {
+//                this.parentNode.removeChild(this);
+//            }
+//        }else {
+//            alert('无效数字或数量是否超过60');
+//        }
+//    }
+
+    }
+    //    判断id值，删除前或后的数值。
+//    为所有的按钮设置高度，使用value值
+    function makeHeight() {
+        for(var x = 0;x<document.getElementsByTagName("button").length;x++){
+            document.getElementsByTagName("button")[x].style.height = document.getElementsByTagName("button")[x].innerText+'px';
+        }
+    }
+    //    判断id值，删除前或后的数值。
+    function del(id) {
+        var btns = document.getElementsByTagName("button");
+        var bls = btns.length;
+        if(bls==0){
+            alert("已无有效数字，无法删除，请尝试添加后再删除！");
+        }else {
+            if(id =="left_out"){
+
+                alert("将为您删除最左边一个数，它是："+btns[0].innerText);
+                btns[0].parentNode.removeChild(btns[0]);
+            }else {
+                console.log(btns[bls-1]);
+                alert("将为您删除最右边一个数，它是："+btns[bls-1].innerText);
+                btns[bls-1].parentNode.removeChild(btns[bls-1]);
+            }
+        }
+
+    }
+//    排序
+    var up = document.getElementById("bigger");
+    var newArr=[];
+    up.onclick = function () {
+        function bubbleSort(arr){
+            var i=arr.length,q;
+            var temp;
+            while(i>0){
+                for(q=0;q<i-1;q++){
+                    if(arr[q]>arr[q+1]){
+                        temp=arr[q];
+                        arr[q]=arr[q+1];
+                        arr[q+1]=temp;
+                    }
+                }
+                i--;
+            }
+            return arr;
+        }
+        newArr = bubbleSort(arr);
+       pai();
+    };
+    var down = document.getElementById("smaller");
+    down.onclick = function () {
+        function bubbleSort(arr){
+            var i=arr.length,q;
+            var temp;
+            while(i>0){
+                for(q=0;q<i-1;q++){
+                    if(arr[q]>arr[q+1]){
+                        temp=arr[q];
+                        arr[q]=arr[q+1];
+                        arr[q+1]=temp;
+                    }
+                }
+                i--;
+            }
+            return arr;
+        }
+        newArr = bubbleSort(arr);
+        newArr = newArr.reverse();
+        pai();
+    };
+    function pai() {
+        display(newArr);
+        makeHeight();
+    }
+
+</script>
+</body>
+</html>
