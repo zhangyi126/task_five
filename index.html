@@ -6,7 +6,7 @@
     <style>
         .style{
             margin-top: 20px;
-            background-color: red;
+            background-color: #ff634a;
             margin-right: 5px;
             border: none;
             vertical-align:bottom
@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="inbtns">
-    <input type="number" id="number" autofocus min="10" max="100" placeholder="请输入10到100以内的数字" size="700">
+    <input type="number" id="number" autofocus min="10" max="100" placeholder="请输入10到100以内的数字"  style="display: block;width: 300px">
     <input type="button" value="左侧入" id="left_in" onclick="main(this.id)">
     <input type="button" value="右侧入" id="right_in" onclick="main(this.id)">
     <input type="button" value="左侧出" id="left_out" onclick="main(this.id)">
@@ -27,83 +27,67 @@
 
 </div>
 <script>
-    //  新建一个数组，存放添加删除的数字，可不用。
+    //  新建一个数组，存放添加删除的数字
     var arr = [];
     //    点击四个按钮调用此函数
     function main(id) {
         console.log(id);
-        switch (id){
 
-            case "left_in":
-                var value = document.getElementById('number').value;
-                arr.unshift(value);
-                display(arr);
-                makeHeight();
-                break;
-            case "right_in":
-                var value = document.getElementById('number').value;
-                arr.push(value);
-                display(arr);
-                makeHeight();
-                break;
-            case "left_out":
-                arr.shift();
-                del(id);
-                break;
-            case "right_out":
-                arr.pop();
-                del(id);
-                break;
-            default:
-                console.log("请点击四个按钮！")
+            switch (id){
+                case "left_in":
+                    var value = document.getElementById('number').value;
+                    if(value>9&&value<101) {
+                        arr.unshift(value);
+                        display(arr);
+                        makeHeight();
+                    }else{
+                        alert("请输入有效数字")
+                    }
+                    break;
+                case "right_in":
+                    var value = document.getElementById('number').value;
+                    if(value>9&&value<101) {
+                        arr.push(value);
+                        display(arr);
+                        makeHeight();
+                    }else{
+                        alert("请输入有效数字")
+                    }
+                    break;
+                case "left_out":
+                    arr.shift();
+                    del(id);
+                    break;
+                case "right_out":
+                    arr.pop();
+                    del(id);
+                    break;
+                default:
+                    console.log("请点击四个按钮！")
         }
         console.log(arr);
     }
 //    利用for循环，将数组中的数字按顺序添加到显示区域
     function display(arr) {
-        var p = document.getElementById("display");
-        p.innerHTML = "";
-        for(var n = 0;n<arr.length;n++){
-            var bt =document.createElement("button");
-            bt.innerText = arr[n];
-            p.appendChild(bt);
+        if (arr.length<=60){
+            var p = document.getElementById("display");
+            p.innerHTML = "";
+            for(var n = 0;n<arr.length;n++){
+                var bt =document.createElement("button");
+                bt.innerText = arr[n];
+                p.appendChild(bt);
 //          为添加的按钮增加样式类
-            bt.className='style';
-
-        }
-
+                bt.className='style';
+            }
 //          清空输入框的数字
-          document.getElementById("number").value = "";
+            document.getElementById("number").value = "";
 //          为添加的按钮绑定点击事件，单击删除
-          bt.onclick=function () {
-              this.parentNode.removeChild(this);
-//            }
-    };
-
-    //判断id值，将数字从前或后增加到显示区域。
-//    function add(value,id) {
-//        if(value !=""&&arr.length<=60&&value>9&&value<101){
-//            var p = document.getElementById("display");
-//            var bt = document.createElement("button");
-//            bt.innerText = value;
-//            if(id=="left_in"){
-//                p.insertBefore(bt,p.childNodes[0]);
-//            }else {
-//                p.appendChild(bt);
-//            }
-//            bt.style.height = value+'px';
-////            为添加的按钮增加样式类
-//            bt.className='style';
-////            清空输入框的数字
-//            document.getElementById("number").value = "";
-////            为添加的按钮绑定点击事件，单击删除
-//            bt.onclick=function () {
-//                this.parentNode.removeChild(this);
-//            }
-//        }else {
-//            alert('无效数字或数量是否超过60');
-//        }
-//    }
+            bt.onclick=function () {
+                this.parentNode.removeChild(this);
+            };
+        }else {
+            alert("内容不能超过60个，谢谢")
+        }
 
     }
     //    判断id值，删除前或后的数值。
@@ -132,46 +116,21 @@
         }
 
     }
-//    排序
+//    冒泡排序
     var up = document.getElementById("bigger");
+//    新建一个数组，存放排序后的数组
     var newArr=[];
+//    单击从小到大按钮调用此函数
     up.onclick = function () {
-        function bubbleSort(arr){
-            var i=arr.length,q;
-            var temp;
-            while(i>0){
-                for(q=0;q<i-1;q++){
-                    if(arr[q]>arr[q+1]){
-                        temp=arr[q];
-                        arr[q]=arr[q+1];
-                        arr[q+1]=temp;
-                    }
-                }
-                i--;
-            }
-            return arr;
-        }
-        newArr = bubbleSort(arr);
+//        对未排序前的数组调用冒泡函数
+        newArr = arr.sort(sortNumber);
+//        对新的数组执行显示和设置高度操作
        pai();
     };
     var down = document.getElementById("smaller");
     down.onclick = function () {
-        function bubbleSort(arr){
-            var i=arr.length,q;
-            var temp;
-            while(i>0){
-                for(q=0;q<i-1;q++){
-                    if(arr[q]>arr[q+1]){
-                        temp=arr[q];
-                        arr[q]=arr[q+1];
-                        arr[q+1]=temp;
-                    }
-                }
-                i--;
-            }
-            return arr;
-        }
-        newArr = bubbleSort(arr);
+        newArr = arr.sort(sortNumber);
+//         倒序，将正序排好的反转下
         newArr = newArr.reverse();
         pai();
     };
@@ -179,7 +138,27 @@
         display(newArr);
         makeHeight();
     }
-
+//     冒泡排序，但100会比10以上的两位数小，因此未用
+//    function bubbleSort(arr){
+//        var i=arr.length,q;
+//        var temp;
+//        while(i>0){
+//            for(q=0;q<i-1;q++){
+//                if(arr[q]>arr[q+1]){
+//                    temp=arr[q];
+//                    arr[q]=arr[q+1];
+//                    arr[q+1]=temp;
+//                }
+//            }
+//            i--;
+//        }
+//        return arr;
+//    }
+    //排序函数
+    function sortNumber(a,b)
+    {
+        return a - b
+    }
 </script>
 </body>
 </html>
